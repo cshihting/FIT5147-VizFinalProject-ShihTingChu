@@ -1,0 +1,60 @@
+@charset "UTF-8";
+body, html {
+    height: 100%;
+    color:#454545;
+}
+
+.content {
+    margin: 50px;
+    width: 60%;
+    font-family: fantasy;
+}
+
+div .row img{
+    margin: 40px 0 10px; /*top ; right&left ; bottom*/
+    width: 80%;
+}
+
+.top_parallax {
+    /* The image used */
+    background-image: url('../pic/business-economy.jpg');
+	opacity: 0.9;
+    height: 85%;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.middle_parallax {
+    /* The image used */
+    background-image: url('../pic/business-economy.jpg');
+	opacity: 0.7;
+    height: 50%; 
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bottom_parallax {
+    /* The image used */
+    background-image: url('../pic/business-economy.jpg');
+    opacity: 0.5;
+    height: 60%; 
+    padding: 180px;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    font-family: fantasy;
+}

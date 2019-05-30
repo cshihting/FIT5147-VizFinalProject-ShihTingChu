@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Suicide Rate</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="../CSS/index.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  
+  <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"> -->
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> <!--use a palette-->
+
+  <!--Interactive Earth-->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <script type="text/javascript" src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script type="text/javascript" src="https://d3js.org/topojson.v2.min.js"></script>
+  <!--manually rotate the earth-->
+  <script type="text/javascript" src="https://bl.ocks.org/mbostock/raw/7ea1dde508cec6d2d95306f92642bc42/6aac691494f752142a67cc43c51a0fd09896dbd4/versor.js"></script>
+</head>
+
+
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">Home</a>
+      </div>
+      <div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><a href="#global">GLOBAL</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">EXPLORE<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#continent">Continent</a></li>
+                <li><a href="#gender">Gender</a></li>
+                <li><a href="#age">Age</a></li>
+                <li><a href="#method">Method</a></li>
+              </ul>
+            </li>
+            <li><a href="#article">ARTICLES</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav> 
+
+  <div id="home" class="parallax jumbotron">
+    <div class="container-fluid">
+      <div class="row text-center">
+        <h2>Suicide Rate Worldwide From 1985 - 2016</h2>
+        <h3>Data Visualisation</h3>
+        <a class="btn btn-primary" href="#quote" role="button">See More</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="quote" class="row text-center" style="margin: 0 20px;">
+    <h1>The bravest thing is to continue the life.</h1>
+    <p style="margin: 0 80px;">
+      Death is life’s way of telling you you’re fired. Suicide is your way of telling life you quit. 
+      Better identify who is at greatest risk for attempting and dying by suicide, so they can get the 
+      help when they need. There are some visualisations based on different attributes as below. You 
+      can see the trend of the suicide rate over time by Continent, Gender, Sex, etc. Also, if you
+      would like to know further information about the suicide issue, you can check the articles in
+      the of the page.
+    </p>
+  </div>
+
+
+  <!-- Global -->
+  <div id="global" class="container-fluid">
+    <h1>Global</h1>
+    <button class="btn_to_scatter">
+      <a href="global_suicide.html" style="color: inherit;text-decoration:none;">
+        Check the trend of the global suicide rate
+      </a>
+    </button>
+    <p>
+      Suicide has been a significant global health problem for many years 
+      because it has kept rising recently. Sometimes, all people feel that 
+      everything seems to go wrong in their life. Hardships pile up, one 
+      misfortune follows another, frustration and resentment become too harsh 
+      to bear. Thus, a person may feel that he or she cannot afford it anymore. 
+      Every individual has his or her own coping strategies for such periods, 
+      for example, some find relief in alcohol, others indulge in compulsive 
+      behaviours such as excessive shopping or eating. Moreover, if life hits 
+      them too hard, they may choose to commit suicide, attempting to solve all 
+      problems at once. In other words, they rather escape from those unsolved problems.
+    </p>
+
+    <div class="row">
+      <div class="col-sm-1">
+        <br>
+        <p>Country:</p>
+        <h4 id="current"></h4>
+      </div>
+      <div class="col-sm-11">
+        <canvas id="globe">
+            <script src="../JS/earth.js" charset="utf-8"></script>
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Continent -->
+  <div id="continent" class="container-fluid">
+    <h1>Continent</h1>
+    <p>
+      As you can see, Europe has the highest suicide rate. Asia and Oceania are 
+      quite similar high. The suicide rate in America is always 8 - 9 over time.
+    </p>
+
+    <button class="btn_to_scatter">
+      <a href="scatter_plot.html" style="color: inherit;text-decoration:none;">
+        See more charts by different factors
+      </a>
+    </button>
+    
+    <div class="wrapper" id="continent-chart">
+      <p>Suicides (per 100K) over Time by Continent</p>
+    </div>
+    
+    <script type="text/javascript">
+      d3.csv('../CSV/reformatted_continent_time.csv', function(error, data) {
+        data.forEach(function (d) {
+          d.year = +d.year;
+          d.africa = +d.africa;
+          d.americas = +d.americas;
+          d.asia = +d.asia;
+          d.europe = +d.europe;
+          d.oceania = +d.oceania;
+        });
+
+        console.log(data);
+
+        var chart = InitiateChart(data, 'year', {
+          'Africa': {column: 'africa'},
+          'Americas': {column: 'americas'},
+          'Asia': {column: 'asia'},
+          'Europe': {column: 'europe'},
+          'Oceania': {column: 'oceania'}
+        }, {xAxis: 'Years', yAxis: 'Suicides per 100K'});
+        chart.bind("#continent-chart");
+        chart.render();
+      });
+    </script>
+
+    <script src="../JS/suicide_over_year.js" charset="utf-8"></script>
+  </div>
+
+
+  <!-- Gender -->
+  <div id="gender" class="container-fluid">
+    <h1>Gender</h1>
+    <div class="row">
+      <div class="col-sm-5">
+        <p>
+          You can see the table beside shows that females usually have the higher percentage 
+          of disorder than males do. However, with the chart below, you can find that men 
+          have the higher suicide rate than women. One of the questions that has persisted, 
+          though, regards this gender gap. It seems especially large given that women tend 
+          to have higher rates of depression diagnoses like the table shown beside.
+        </p>
+        <p>
+          But men may be less likely to admit when they feel vulnerable, whether to 
+          themselves or friends. They also can be more reticent than women to see a 
+          doctor. A UK British Medical Journal study found general primary care consultation 
+          rates were 32% lower in men than women.
+        </p>
+        <p>
+          "Men seek help for mental health less often,” Harkavy-Friedman says. “It's 
+          not that men don't have the same issues as women – but they're a little 
+          less likely to know they have whatever stresses or mental health conditions 
+          that are putting them at greater risk for suicide."
+        </p>
+      </div>
+      <div class="col-sm-7">
+        <img src="../pic/gender_mental.png" style="width: 90%;" alt="Gender Mental Table">
+      </div>
+    </div>
+
+
+    <div class="wrapper" id="gender-chart">
+      <p>Suicides (per 100K) over Time by Gender</p>
+    </div>
+    <script type="text/javascript">
+
+      d3.csv('../CSV/reformatted_sex_time.csv', function(error, data) {
+      data.forEach(function (d) {
+        d.year = +d.year;
+        d.Female = +d.Female;
+        d.Male = +d.Male;
+      });
+
+      var chart = InitiateChart(data, 'year', {
+        'Female': {column: 'Female'},
+        'Male': {column: 'Male'}
+      }, {xAxis: 'Years', yAxis: 'Suicides per 100K'});
+      chart.bind("#gender-chart");
+      chart.render();
+      });
+
+    </script>
+    
+    <script src="../JS/suicide_over_year.js" charset="utf-8"></script>
+    
+  </div>
+
+
+  <!-- Age -->
+  <div id="age" class="container-fluid">
+      <h1>Age</h1>
+      <p>
+        Professor Henry Brodaty of the Centre for Healthy Brain Ageing , said lots of the 
+        older had passive suicide thoughts such as "I would be quite happy if I didn't wake 
+        up in the morning". As shown in the line chart below, we can find out that the 75+ 
+        years age group has the highest suicide rate.
+      </p>
+
+      <div class="wrapper" id="age-chart">
+        <p>Suicides (per 100K) over Time by Age</p>
+      </div>
+      
+      <script type="text/javascript">
+  
+        d3.csv('../CSV/reformatted_age_time.csv', function(error, data) {
+        data.forEach(function (d) {
+          d.year = +d.year;
+          d["5-14"] = +d["5-14"];
+          d["15-24"] = +d["15-24"];
+          d["25-34"] = +d["25-34"];
+          d["35-54"] = +d["35-54"];
+          d["55-74"] = +d["55-74"];
+          d["75+"] = +d["75+"];
+        });
+
+        var chart = InitiateChart(data, 'year', {
+          '5-14': {column: '5-14'},
+          '15-24': {column: '15-24'},
+          '25-34': {column: '25-34'},
+          '35-54': {column: '35-54'},
+          '55-74': {column: '55-74'},
+          '75+': {column: '75+'}
+        }, {xAxis: 'Years', yAxis: 'Suicides per 100K'});
+        chart.bind("#age-chart");
+        chart.render();
+        });
+  
+      </script>
+      
+      <script src="../JS/suicide_over_year.js" charset="utf-8"></script>
+  </div>
+
+
+  <!-- Method -->
+  <div id="method" class="container-fluid">
+    <h1>Suicide Methods</h1>
+    <p>
+      A study results indicate that women as a group more frequently attempted suicide 
+      rather than actually committing it, whereas men were more likely to complete suicides 
+      and choose more violent suicide methods. Violent and highly lethal methods such as 
+      firearm suicide and hanging are more frequent among men, whereas women often choose 
+      poisoning or drowning, which are less violent and less lethal.
+    </p>
+
+    <p>
+      Take U.S. as an example. In 2017, firearms were the most common method of death 
+      by suicide, accounting for a little more than half (50.57%) of all suicide deaths. 
+      The next most common methods were suffocation (including hangings) at 27.72% and 
+      poisoning at 13.89%.
+    </p>
+    
+    
+    <div id="piechart"></div>
+
+    <!-- Add a reference to the Chart API at google.com -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+      ['Method', 'Count in 2017'],
+      ['Firearm', 23854],
+      ['Suffocation', 13075],
+      ['Poisoning', 6554],
+      ['Other', 3690]
+    ]);
+
+      // Optional; add a title and set the width and height of the chart
+      var options = {'title':'Suicide Methods in 2017', 'width':650, 'height':450};
+
+      // Display the chart inside the <div> element with id="piechart"
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      chart.draw(data, options);
+    }
+    </script>
+  </div>
+
+
+  <!-- Article -->
+  <div id="article" class="container article"> <!-- container-fluid 沒有寬度設定，通常用在滿版頁面-->
+    <div class="row">
+      <figure class="col-sm-3">
+        <p>Economy</p>
+        <a href="article.html">
+          <img src="../pic/money.png" alt="Article1">
+        </a>
+      </figure>
+      <figure class="col-sm-3">
+        <p>Society</p>
+        <a href="article.html">
+          <img src="../pic/internet.png" alt="Article2">
+        </a>
+      </figure>
+      <figure class="col-sm-3">
+        <p>Gender</p>
+        <a href="article.html">
+          <img src="../pic/sex.png" alt="Article3">
+        </a>
+      </figure>
+      <figure class="col-sm-3">
+        <p>Weather</p>
+        <a href="article.html">
+          <img src="../pic/snowflake.png" alt="Article4">
+        </a>
+      </figure>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="container">
+    <div class="row">
+      <p class="col-sm-4">&copy; FIT5147-Data Exploration & Visualisation</p>
+      <p class="col-sm-8">Designed by Shih-Ting Chu</p>
+    </div>
+  </footer>
+
+</body>
+</html>

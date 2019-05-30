@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Suicide Rate over Time</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style>
+        .bar {
+        fill: grey;
+        }
+        
+        .highlight {
+            fill: coral;
+        }
+    </style>
+</head>
+
+<body>
+    <svg width="1000" height="500"></svg>
+    <script>
+
+        d3.csv("../CSV/global_suicides.csv", function(error, data) {
+            if (error) {
+                throw error;
+            }
+
+            x.domain(data.map(function(d) { return d.year; }));
+            y.domain([0, d3.max(data, function(d) { return d.suicides_per_100k; })]);
+
+            // x axis
+            g.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-1em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                    return "rotate(-75)" 
+                });
+
+            // x label name
+            g.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .append("text")
+            .attr("y", height - 240)
+            .attr("x", width - 400)
+            .attr("text-anchor", "end")
+            .attr("stroke", "black")
+            .text("Year");
+
+            // y label name
+            g.append("g")
+            .call(d3.axisLeft(y).tickFormat(function(d){
+                return d;
+            }).ticks(10))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 8)
+            .attr("dy", "-5.1em")
+            .attr("text-anchor", "end")
+            .attr("stroke", "black")
+            .text("Sucides per 100K");
+
+            g.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .on("mouseover", onMouseOver) //Add listener for the mouseover event
+            .on("mouseout", onMouseOut)   //Add listener for the mouseout event
+            .attr("x", function(d) { return x(d.year); })
+            .attr("y", function(d) { return y(d.suicides_per_100k); })
+            .attr("width", x.bandwidth())
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(400)
+            .delay(function (d, i) {
+                return i * 50;
+            })
+            .attr("height", function(d) { return height - y(d.suicides_per_100k); });
+        });
+
+    </script>
+
+    <button onclick="goBack()">Go Back</button>
+    <script src="../JS/global_suicide.js" charset="utf-8"></script>
+
+</body>
+</html>
